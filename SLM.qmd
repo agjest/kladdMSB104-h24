@@ -75,3 +75,13 @@ filter(y > 5)
 ```{r}
 mean(df_earn$x)
 ```
+
+```{r}
+cars %>%
+  lm(
+    formula = 'dist ~ speed',
+    data = .
+  ) |> 
+  as_flextable() |> 
+  line_spacing(space = 0.2, part = "all")
+```
