@@ -1,0 +1,77 @@
+---
+title: "SLM"
+format: 
+  html: default
+  pdf:
+    papersize: a4
+  docx: default
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(wooldridge)
+library(flextable)
+```
+
+```{r}
+#| paged.print: false
+{set.seed(123)
+campus_10 <- wooldridge::campus %>% 
+  .[sample(1:97, 10),] |> 
+  select(police, crime)}
+```
+
+```{r}
+campus_10 %>%
+  lm(
+    formula = 'crime ~ police',
+    data = .
+  ) |> 
+  summary()
+```
+
+```{r}
+#| label: tbl-first-summary
+#| tbl-cap: "First summary of campus model."
+#| tbl-cap-location: bottom
+campus_10 %>%
+  lm(
+    formula = 'crime ~ police',
+    data = .
+  ) |> 
+  as_flextable() |> 
+  line_spacing(space = 0.3, part = "all")
+```
+
+In @tbl-first-summary you will find the first summary of the campus model.
+
+```{r}
+campus <- campus |> 
+  mutate(
+    police = police / enroll,
+    crime = crime / enroll
+  )
+```
+
+```{r}
+campus |> 
+  summarise(mean(police))
+```
+
+```{r}
+rm(campus)
+```
+
+```{r}
+df_earn <- tibble(
+x = sample(8:20, 100, replace = TRUE),
+y = -14 + 2.5*x + rnorm(100, 0, 5)) %>% 
+filter(y > 5)
+```
+
+```{r}
+mean(df_earn$x)
+```
